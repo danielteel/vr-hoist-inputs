@@ -17,6 +17,9 @@ void setup() {
   
     Heltec.display->flipScreenVertically();
     Heltec.display->setFont(ArialMT_Plain_10);
+    Heltec.display->clear();
+    Heltec.display->drawString(0, 0, "WiFi connecting...");
+    Heltec.display->display();
   
     WiFi.begin("Ol Dusty", "powerboner69");
   
@@ -26,7 +29,6 @@ void setup() {
 
     
   adcAttachPin(35);
-  
   pinMode(19, INPUT_PULLUP);
   pinMode(22, OUTPUT);
 
@@ -50,8 +52,13 @@ void setup() {
 
 byte readHoist(){
   float raw = (analogRead(35)+analogRead(35)+analogRead(35))/3;
-  if (raw>extendMax) raw=extendMax;
-  if (raw<extendMin) raw=extendMin;
+  if (extendMax>extendMin){
+    if (raw>extendMax) raw=extendMax;
+    if (raw<extendMin) raw=extendMin;
+  }else{
+    if (raw<extendMax) raw=extendMax;
+    if (raw>extendMin) raw=extendMin;
+  }
   raw=raw-extendMin;
   raw=raw/(extendMax-extendMin);
   raw=raw*31;
@@ -98,6 +105,7 @@ void loop() {
           Heltec.display->drawProgressBar(60, 0, 60, 10, float(float(hoistSpeed)/32.0f)*100.0f);
           
           Heltec.display->drawString(0, 15, "Power "+String(powerState?"on":"off"));
+          Heltec.display->drawString(0, 30, "Connected");
           Heltec.display->display();
           
         }
@@ -112,6 +120,7 @@ void loop() {
     Heltec.display->drawProgressBar(60, 0, 60, 10, float(float(hoistSpeed)/32.0f)*100.0f);
     
     Heltec.display->drawString(0, 15, "Power "+String(readPowerState()?"on":"off"));
+    Heltec.display->drawString(0, 30, "Not connected");
     digitalWrite(22, readPowerState());
     Heltec.display->display();
 }
