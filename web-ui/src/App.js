@@ -1,25 +1,58 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [radAlt, setRadAlt] = useState(255);
+    const [hoistOutLength, setHoistOutLength] = useState(0);
+    const [gameConnected, setGameConnected] = useState(false);
+
+    useEffect( () => {
+        let timeoutId = null;
+        const fetchData = () => {
+            fetch('http://192.168.1.5:3000/data').then(result => {
+                if (result.status!==200) throw Error("bad status code");
+                return result.json();
+            }).then(data=>{
+                setGameConnected( true );
+                setRadAlt( () => data.radAlt===255?'inop':data.radAlt*2 );
+                setHoistOutLength( () => data.hoistOutLength );
+                console.log(data);
+                timeoutId=setTimeout( fetchData, 500);//game is connected to request faster
+            }).catch( ()=>{
+                setGameConnected( false );
+                timeoutId=setTimeout( fetchData, 1000);//game is not connected so wait a little before reattempting
+            });
+        }
+        timeoutId=setTimeout( fetchData, 1000);
+
+        return () => clearTimeout(timeoutId);
+    }, []);
+
+    return (
+        <div className="App">
+            <header className="App-header">
+                VR Hoist Demo WebUI
+            </header>
+            {
+                gameConnected ?
+                    <>
+                        <button onClick={()=>{
+                            fetch('http://192.168.1.5:3000/reset').then(()=>{});
+                        }}>Reset Level</button>
+
+                        <div>
+                            Rad alt: {radAlt}
+                        </div>
+                        <div>
+                            Hoist out length: {hoistOutLength}
+                        </div>
+                    </>
+                :
+                    <div>Game not connected</div>
+            }
+
+        </div>
+    );
 }
 
 export default App;
