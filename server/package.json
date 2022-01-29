@@ -1,0 +1,16 @@
+{
+    "name": "vr-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "author": "Dan Teel <danjteel@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+      "cors": "^2.8.5",
+      "express": "^4.17.2"
+    }
+  }
+  
