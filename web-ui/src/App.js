@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 function App() {
     const [radAlt, setRadAlt] = useState(255);
     const [hoistOutLength, setHoistOutLength] = useState(0);
-    const [gameConnected, setGameConnected] = useState(false);
+    const [gameConnected, setGameConnected] = useState(true);
 
     useEffect( () => {
         let timeoutId = null;
@@ -36,16 +36,16 @@ function App() {
             {
                 gameConnected ?
                     <>
-                        <button type='button' onClick={()=>{
+                        <div style={{padding:'10px', fontSize: '24px'}}>
+                            Rad alt: {radAlt} ft
+                        </div>
+                        <div style={{padding:'10px', fontSize: '24px'}}>
+                            Hoist out length: {hoistOutLength} ft
+                        </div>
+                        
+                        <button type='button' style={{minWidth:'100px', minHeight:'30px', fontSize:'24px'}} onClick={()=>{
                             fetch('http://192.168.1.5:3000/reset').then(()=>{});
                         }}>Reset Level</button>
-
-                        <div>
-                            Rad alt: {radAlt}
-                        </div>
-                        <div>
-                            Hoist out length: {hoistOutLength}
-                        </div>
                     </>
                 :
                     <div>Game not connected</div>
