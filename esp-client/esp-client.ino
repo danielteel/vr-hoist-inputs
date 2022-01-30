@@ -38,7 +38,7 @@ void setup() {
 
     //Connect to wifi
     showString("Connecting to WiFi");
-    WiFi.begin("Ol Dusty", "powerboner69");
+    WiFi.begin("vrnet", "tacotaco");
     while(WiFi.status() != WL_CONNECTED) {
       delay(500);
     }
