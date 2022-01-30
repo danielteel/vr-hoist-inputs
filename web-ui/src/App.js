@@ -36,7 +36,7 @@ function App() {
             {
                 gameConnected ?
                     <>
-                        <button onClick={()=>{
+                        <button type='button' onClick={()=>{
                             fetch('http://192.168.1.5:3000/reset').then(()=>{});
                         }}>Reset Level</button>
 
