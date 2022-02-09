@@ -60,6 +60,7 @@ const ue4Server = net.createServer((socket) => {
     console.log(Uint8Array.from([lastPowerState, lastHoistCommand, lastJettisonState]));
     function onData(d) {  
         radAlt=d[0];
+console.log(radAlt*2);
         hoistOutLength=d[1];
     }
     function onClose() {  
